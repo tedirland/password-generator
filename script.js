@@ -1,107 +1,145 @@
-// Assignment Code (SHOULD BE COMPLETE IN GATHERING INPUTS FROM USER)
-// var passwordEl = document.getElementById("password"); Defininig this variable in function
-var generateBtn = document.querySelector("#generate");
-var passwordLength = prompt("How many characters would you like your password to contain? (Must be between 8 and 128)")
-var specialChar = confirm("Would you like your password to contain special characters (! @ #)?")
-var numericChar = confirm("Would you like your password to contain numbers?");
-var lowerCaseChar = confirm("Would you like your password to contain lowercase characters?")
-var upperCaseChar = confirm("Would you like your password to contain UPPERCASE characters?")
-// These are the arrays for the different strings
-var passwordOptions = {
+// // Assignment Code (SHOULD BE COMPLETE IN GATHERING INPUTS FROM USER)
 
-  "special characters": ["! @ # $ % ^ & * ( ) _ + "],
-
-  "numeric charachers": ["1 2 3 4 5 6 7 8 9"],
-
-  "lowercase characters": ["q w e r t y u i o p a s d f g h j k l z x c v b n m"],
-
-  "uppercase characters": ["Q W E R T Y U I O P A S D F G H J K L Z X C V B N M"],
-
-  "all options": ["! @ # $ % ^ & * ( ) _ + 1 2 3 4 5 6 7 8 9 q w e r t y u i o p a s d f g h j k l z x c v b n m Q W E R T Y U I O P A S D F G H J K L Z X C V B N M"]
+// DOM Elements
+const resultEl = document.getElementById('password');
+const lengthEl = prompt("How many characters would you like your password to contain? (Must be between 8 and 128)");
+const uppercaseEl = confirm("Would you like your password to contain UPPERCASE characters?");
+const lowercaseEl = confirm("Would you like your password to contain lowercase characters?");
+const numbersEl = confirm("Would you like your password to contain numbers?");
+const symbolsEl = confirm("Would you like your password to contain special characters (! @ #)?");
+const generateEl = document.getElementById('generate');
+const copyEl = document.getElementById('copy');
+const length = +lengthEl.value;
 
 
+var randomFunc = {
+  lower: getRandomLower,
+  upper: getRandomUpper,
+  number: getRandomNumber,
+  symbol: getRandomSymbol
 
 };
 
-// Write password to the #password input
+// Generate Event listen
+generateEl.addEventListener('click', generatePassword); {
+  const length = parseInt(lengthEl);
+  const hasUpper = uppercaseEl;
+  const hasLower = lowercaseEl;
+  const hasNumber = numbersEl;
+  const hasSymbol = symbolsEl;
+
+
+  console.log(length, hasLower,hasNumber, hasSymbol, hasUpper);
+console.log(generatedPassword);
+
+
+  resultEl.innerText = generatePassword(
+    hasLower,
+    hasUpper,
+    hasNumber,
+    hasSymbol,
+    length
+  )
+
+};
+
+// Generate Password Function
+function generatePassword(upper, lower, number, symbol, length) {
+  // Init PW Variable
+  // Filter out false types
+  // Loop over the length call a generator function  for each type
+  // Add final pw to the pw variable and return
+
+  var generatedPassword = '';
+
+  const typesCount = lower + upper + number + symbol;
+
+  // console.log('typesCount: ', typesCount);
+
+  const typesArr = [{ lower }, { upper }, { number }, { symbol }].filter
+    (item => Object.values(item)[0]
+    );
+
+  // console.log('typesArr: ', typesArr);
+
+  if (typesCount === 0) {
+    alert("You must select at least one type of character! Please reload this page and try again.")
+  }
+  for (let i = 0; i < length; i += typesCount) {
+
+    typesArr.forEach(type => {
+      const funcName = Object.keys(type)[0];
+
+
+      generatedPassword += randomFunc [funcName]();
+      // console.log('funcName: ', funcName);
+
+
+    });
+  }
+
+  // console.log(generatedPassword);
+
+}
+
+
+
+// Begin Generator Functions
+function getRandomLower() {
+
+  return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
+}
+
+function getRandomUpper() {
+
+  return String.fromCharCode(Math.floor(Math.random() * 26) + 65);
+}
+
+function getRandomNumber() {
+
+  return String.fromCharCode(Math.floor(Math.random() * 10) + 48);
+}
+
+
+function getRandomSymbol() {
+
+  const symbols = '!@#$%^&*(){}[]=<>/,.'
+
+  return symbols[Math.floor(Math.random() * symbols.length)];
+}
+// End Generator Functions
 
 
 
 
 
-function writePassword() {
-  var password = generatePassword(function () {
-    // Overarching requirement - passwordLength must be between 8 and 128 for the function to run
-    if (passwordLength >= 8 && passwordLength <= 128) {
 
-      // If all 4 options are confirmed
-      if (specialChar && numericChar && lowerCaseChar && upperCaseChar) {
-        Math.random
 
-      }
 
-      else if (numericChar && lowerCaseChar && upperCaseChar) {
 
-      }
 
-      else if (specialChar && lowerCaseChar && upperCaseChar) {
 
-      }
-      else if (specialChar && numericChar && upperCaseChar) {
+// function writePassword() {
 
-      }
 
-      else if (specialChar && numericChar && lowerCaseChar) {
+//       passwordText.textContent = password;
 
-      }
+  // copyBtn.removeAttribute("disabled");
+  // // copyBtn.focus();
 
-      else if (specialChar && numericChar) {
 
-      }
 
-      else if (specialChar) {
-
-      }
-
-      else if (numericChar) {
-
-      }
-
-      else if (lowerCaseChar) {
-
-      }
-
-      else if (upperCaseChar) {
-
-      }
-
-      else {
-        alert("You must select at least one type of characters to use!")
-      }
-
-    }
-
-    // If password length is not between 8 and 128, display the following alert
-    else {
-      alert("Please enter a number between 8 and 128!")
-    }
-
-  });
-  var passwordText = document.querySelector("#password");
   // passwordText.textContent = need to set a variable for password input and use it here
 
-  passwordText.value = password;
 
-  copyBtn.removeAttribute("disabled");
-  copyBtn.focus();
-}
+// }
 
-function copyToClipboard() {
+// function copyToClipboard() {
   // BONUS 
-}
+// }
 
 // Add event listener to generate button
-generateBtn.addEventListener("click", generatePassword);
-generateBtn.addEventListener("click")
+// generateBtn.addEventListener("click", generatePassword());
+// // generateBtn.addEventListener("click")
 
-// BONUS EVENT LISTENER
+// // BONUS EVENT LISTENER

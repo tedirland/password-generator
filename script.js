@@ -9,8 +9,10 @@ const numbersEl = confirm("Would you like your password to contain numbers?");
 const symbolsEl = confirm("Would you like your password to contain special characters (! @ #)?");
 const generateEl = document.getElementById('generate');
 const copyEl = document.getElementById('copy');
-const length = +lengthEl.value;
+const clipboardEl = document.getElementById('clipboard');
 
+
+// Creating an object to house generator functions
 
 var randomFunc = {
   lower: getRandomLower,
@@ -21,7 +23,7 @@ var randomFunc = {
 };
 
 // Generate Event listen
-generateEl.addEventListener('click', generatePassword); {
+generateEl.addEventListener('click', () => {
   const length = parseInt(lengthEl);
   const hasUpper = uppercaseEl;
   const hasLower = lowercaseEl;
@@ -29,53 +31,83 @@ generateEl.addEventListener('click', generatePassword); {
   const hasSymbol = symbolsEl;
 
 
-  console.log(length, hasLower,hasNumber, hasSymbol, hasUpper);
-console.log(generatedPassword);
-
 
   resultEl.innerText = generatePassword(
-    hasLower,
     hasUpper,
+    hasLower,
     hasNumber,
     hasSymbol,
     length
   )
 
-};
+});
+
+// Copy Password to Clipboard
+
+clipboardEl.addEventListener('click', () => {
+
+  const textarea = document.createElement('textarea');
+  const password = resultEl.innerText;
+
+  if (!password) {
+    return;
+  }
+
+  textarea.value = password;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  textarea.remove();
+  alert('Password copied to clipboard!')
+
+
+
+
+});
 
 // Generate Password Function
 function generatePassword(upper, lower, number, symbol, length) {
-  // Init PW Variable
-  // Filter out false types
-  // Loop over the length call a generator function  for each type
-  // Add final pw to the pw variable and return
+  // 1. Init PW Variable
+  // 2. Filter out false types
+  // 3. Loop over the length call a generator function  for each type
+  // 4. Add final pw to the pw variable and return
 
-  var generatedPassword = '';
+  let generatedPassword = '';
 
-  const typesCount = lower + upper + number + symbol;
+  const typesCount = upper + lower + number + symbol;
 
-  // console.log('typesCount: ', typesCount);
+  console.log('typesCount: ', typesCount);
 
-  const typesArr = [{ lower }, { upper }, { number }, { symbol }].filter
-    (item => Object.values(item)[0]
-    );
 
-  // console.log('typesArr: ', typesArr);
 
+  const typesArr = [{ upper }, { lower }, { number }, { symbol }].filter
+    (item => Object.values(item)[0]);
+
+  console.log('typesArr: ', typesArr);
+
+
+  // 
   if (typesCount === 0) {
-    alert("You must select at least one type of character! Please reload this page and try again.")
+    alert("You must select at least one type of character! Please reload this page and try again.");
   }
+
+  // Throw another conditional in here to return an error if length is less than 8 and greater than 128
+
   for (let i = 0; i < length; i += typesCount) {
 
     typesArr.forEach(type => {
       const funcName = Object.keys(type)[0];
+      // console.log('funcName:', funcName);
 
 
-      generatedPassword += randomFunc [funcName]();
-      // console.log('funcName: ', funcName);
+      generatedPassword += randomFunc[funcName]();
+
 
 
     });
+    const finalPassword = generatedPassword
+
+    return finalPassword;
   }
 
   // console.log(generatedPassword);
@@ -84,7 +116,7 @@ function generatePassword(upper, lower, number, symbol, length) {
 
 
 
-// Begin Generator Functions
+// Begin Generator Functions (using browser Charset for upper, lower and number. String var for symbols)
 function getRandomLower() {
 
   return String.fromCharCode(Math.floor(Math.random() * 26) + 97);

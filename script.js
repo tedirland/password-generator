@@ -1,5 +1,3 @@
-// // Assignment Code (SHOULD BE COMPLETE IN GATHERING INPUTS FROM USER)
-
 // DOM Elements
 const resultEl = document.getElementById('password');
 const lengthEl = prompt("How many characters would you like your password to contain? (Must be between 8 and 128)");
@@ -24,12 +22,13 @@ var randomFunc = {
 
 // Generate Event listen
 generateEl.addEventListener('click', () => {
-  const length = parseInt(lengthEl);
+  const length = Number(lengthEl);
   const hasUpper = uppercaseEl;
   const hasLower = lowercaseEl;
   const hasNumber = numbersEl;
   const hasSymbol = symbolsEl;
 
+  console.log(typeof lengthEl);
 
 
   resultEl.innerText = generatePassword(
@@ -42,28 +41,28 @@ generateEl.addEventListener('click', () => {
 
 });
 
-// Copy Password to Clipboard
+// // Copy Password to Clipboard
 
-clipboardEl.addEventListener('click', () => {
+// clipboardEl.addEventListener('click', () => {
 
-  const textarea = document.createElement('textarea');
-  const password = resultEl.innerText;
+//   const textarea = document.createElement('textarea');
+//   const password = resultEl.innerText;
 
-  if (!password) {
-    return;
-  }
+//   if (!password) {
+//     return;
+//   }
 
-  textarea.value = password;
-  document.body.appendChild(textarea);
-  textarea.select();
-  document.execCommand('copy');
-  textarea.remove();
-  alert('Password copied to clipboard!')
-
-
+//   textarea.value = password;
+//   document.body.appendChild(textarea);
+//   textarea.select();
+//   document.execCommand('copy');
+//   textarea.remove();
+//   alert('Password copied to clipboard!')
 
 
-});
+
+
+// });
 
 // Generate Password Function
 function generatePassword(upper, lower, number, symbol, length) {
@@ -80,16 +79,21 @@ function generatePassword(upper, lower, number, symbol, length) {
 
 
 
+  // Creating an array to log the boolean values of the options
   const typesArr = [{ upper }, { lower }, { number }, { symbol }].filter
+    // used to weed out fales values from being returned in the array  
     (item => Object.values(item)[0]);
+
 
   console.log('typesArr: ', typesArr);
 
 
-  // 
+  // If no types are checked, display alert and reload the page
   if (typesCount === 0) {
-    alert("You must select at least one type of character! Please reload this page and try again.");
+    alert("You must select at least one type of character!");
+    location.reload();
   }
+
 
   // Throw another conditional in here to return an error if length is less than 8 and greater than 128
 
@@ -97,21 +101,17 @@ function generatePassword(upper, lower, number, symbol, length) {
 
     typesArr.forEach(type => {
       const funcName = Object.keys(type)[0];
-      // console.log('funcName:', funcName);
-
-
+      console.log('funcName: ', funcName);
       generatedPassword += randomFunc[funcName]();
 
-
-
     });
-    const finalPassword = generatedPassword
-
-    return finalPassword;
   }
 
-  // console.log(generatedPassword);
 
+
+  const finalPassword = generatedPassword.slice(0, length);
+  return finalPassword;
+console.log(finalPassword);
 }
 
 
